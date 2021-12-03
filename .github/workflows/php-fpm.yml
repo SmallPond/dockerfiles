@@ -1,6 +1,7 @@
 name: php-fpm
 
 on:
+  workflow_dispatch:
   push:
     paths:
       - "Dockerfile.php-fpm"
@@ -11,10 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@master
 
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
+      - name: Log into tx docker registry
+        run: echo "${{ secrets.DOCKERHUB_TX_TOKEN }}" | docker login  ccr.ccs.tencentyun.com -u ${{ secrets.DOCKERHUB_TX_USERNAME }} --password-stdin
 
       - name: docker push
         run: |
-          docker build -t ghcr.io/smallpond/php-fpm -f Dockerfile.php-fpm .
-          docker push ghcr.io/smallpond/php-fpm
+          docker build -t smallpond/php-fpm -f Dockerfile.php-fpm .
+          docker push smallpond/php-fpm
